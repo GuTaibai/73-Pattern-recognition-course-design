@@ -1,0 +1,126 @@
+AttributeError
+Python 3.9.19: F:\ANACONDA\envs\yolonnx\python.exe
+Thu Jul  4 16:25:28 2024
+
+A problem occurred in a Python script.  Here is the sequence of
+function calls leading up to the error, in the order they occurred.
+
+ F:\yolov5-onnx\Yolo2onnxDetectProjectDemo.py in <module>
+  124     os.makedirs(log_dir, exist_ok=True)
+  125     cgitb.enable(format='text', logdir=log_dir)
+  126 
+  127     opt = parse_opt()
+  128     run(**vars(opt))
+run = <function run>
+builtinvars = <built-in function vars>
+opt = Namespace(nogui=False, weights='need/models/best..._log=False, save_result=False, video_split=False)
+
+ F:\yolov5-onnx\Yolo2onnxDetectProjectDemo.py in run(**kwargs={'classes': 'need/best.txt', 'conf_thres': 0.5, 'imgsz': [640, 640], 'iou_thres': 0.5, 'nogui': False, 'save_log': False, 'save_path': 'out', 'save_result': False, 'source': 'data', 'video_split': False, ...})
+   19         QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)  # 高分辨率
+   20         app = QtWidgets.QApplication(sys.argv)
+   21         mainwindow = MainWindow()
+   22         # import qt_material  # 一个美化pyqt界面的第三方库
+   23         # qt_material.apply_stylesheet(app, 'dark_blue.xml')
+mainwindow undefined
+MainWindow = <class 'utils.Main_Window.MainWindow'>
+
+ F:\yolov5-onnx\utils\Main_Window.py in __init__(self=<utils.Main_Window.MainWindow object>)
+  292         # self.script_api.start_sig.connect(lambda x: self.start() if x else self.stop())
+  293 
+  294         self.loadConfig()
+  295 
+  296         self.statusBar().showMessage('initialized', 5000)
+self = <utils.Main_Window.MainWindow object>
+self.loadConfig = <bound method MainWindow.loadConfig of <utils.Main_Window.MainWindow object>>
+
+ F:\yolov5-onnx\utils\Main_Window.py in loadConfig(self=<utils.Main_Window.MainWindow object>)
+  350         self.comboBox_2.setCurrentIndex(cfg.search('root', 'flip', default_value=0, return_type=int))
+  351         self.comboBox_3.setCurrentIndex(cfg.search('root', 'rotate', default_value=0, return_type=int))
+  352         self.setSource(cfg.search('root', 'input_source', default_value=0))
+  353         self.lineEdit_3.setText(cfg.search('root', 'model_path', os.path.join('need', 'models', 'best.onnx')))
+  354         self.class_file = cfg.search('root', 'class_path', os.path.join('need', 'best.txt'))
+self = <utils.Main_Window.MainWindow object>
+self.setSource = <bound method MainWindow.setSource of <utils.Main_Window.MainWindow object>>
+cfg = <utils.general.cfg object>
+cfg.search = <bound method cfg.search of <utils.general.cfg object>>
+default_value undefined
+
+ F:\yolov5-onnx\utils\Main_Window.py in setSource(self=<utils.Main_Window.MainWindow object>, source='F:/模式识别课设/数据集/videos/videos_test/20200829153758943.mp4_1.mp4', **kwargs={})
+  509             if self.comboBox_3.currentIndex() != 0:
+  510                 img = cv2.rotate(img, self.rotate_type[self.comboBox_3.currentIndex()])
+  511             self.displayImg(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+  512             vc.release()
+  513         return 'dataset' in self.dt.__dict__.keys()
+self = <utils.Main_Window.MainWindow object>
+self.displayImg = <bound method MainWindow.displayImg of <utils.Main_Window.MainWindow object>>
+global cv2 = <module 'cv2' from 'F:\\ANACONDA\\envs\\yolonnx\\lib\\site-packages\\cv2\\__init__.py'>
+cv2.cvtColor = <built-in function cvtColor>
+img = array([[[198, 176, 180],
+        [198, 176, 180]...52,  41],
+        [ 37,  52,  41]]], dtype=uint8)
+cv2.COLOR_BGR2RGB = 4
+
+ F:\yolov5-onnx\utils\Main_Window.py in displayImg(self=<utils.Main_Window.MainWindow object>, img=array([[[180, 176, 198],
+        [180, 176, 198]...52,  37],
+        [ 41,  52,  37]]], dtype=uint8))
+  625         if self.save_video:
+  626             self.video_writer.write(cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
+  627         self.script_api.img_data = img
+  628         img = QtGui.QImage(img.data, img.shape[1], img.shape[0], img.shape[1] * 3, QtGui.QImage.Format_RGB888)
+  629         p = min(self.label.width() / img.width(), self.label.height() / img.height())
+self = <utils.Main_Window.MainWindow object>
+self.script_api undefined
+img = array([[[180, 176, 198],
+        [180, 176, 198]...52,  37],
+        [ 41,  52,  37]]], dtype=uint8)
+AttributeError: 'MainWindow' object has no attribute 'script_api'
+    __cause__ = None
+    __class__ = <class 'AttributeError'>
+    __context__ = None
+    __delattr__ = <method-wrapper '__delattr__' of AttributeError object>
+    __dict__ = {}
+    __dir__ = <built-in method __dir__ of AttributeError object>
+    __doc__ = 'Attribute not found.'
+    __eq__ = <method-wrapper '__eq__' of AttributeError object>
+    __format__ = <built-in method __format__ of AttributeError object>
+    __ge__ = <method-wrapper '__ge__' of AttributeError object>
+    __getattribute__ = <method-wrapper '__getattribute__' of AttributeError object>
+    __gt__ = <method-wrapper '__gt__' of AttributeError object>
+    __hash__ = <method-wrapper '__hash__' of AttributeError object>
+    __init__ = <method-wrapper '__init__' of AttributeError object>
+    __init_subclass__ = <built-in method __init_subclass__ of type object>
+    __le__ = <method-wrapper '__le__' of AttributeError object>
+    __lt__ = <method-wrapper '__lt__' of AttributeError object>
+    __ne__ = <method-wrapper '__ne__' of AttributeError object>
+    __new__ = <built-in method __new__ of type object>
+    __reduce__ = <built-in method __reduce__ of AttributeError object>
+    __reduce_ex__ = <built-in method __reduce_ex__ of AttributeError object>
+    __repr__ = <method-wrapper '__repr__' of AttributeError object>
+    __setattr__ = <method-wrapper '__setattr__' of AttributeError object>
+    __setstate__ = <built-in method __setstate__ of AttributeError object>
+    __sizeof__ = <built-in method __sizeof__ of AttributeError object>
+    __str__ = <method-wrapper '__str__' of AttributeError object>
+    __subclasshook__ = <built-in method __subclasshook__ of type object>
+    __suppress_context__ = False
+    __traceback__ = <traceback object>
+    args = ("'MainWindow' object has no attribute 'script_api'",)
+    with_traceback = <built-in method with_traceback of AttributeError object>
+
+The above is a description of an error in a Python program.  Here is
+the original traceback:
+
+Traceback (most recent call last):
+  File "F:\yolov5-onnx\Yolo2onnxDetectProjectDemo.py", line 128, in <module>
+    run(**vars(opt))
+  File "F:\yolov5-onnx\Yolo2onnxDetectProjectDemo.py", line 21, in run
+    mainwindow = MainWindow()
+  File "F:\yolov5-onnx\utils\Main_Window.py", line 294, in __init__
+    self.loadConfig()
+  File "F:\yolov5-onnx\utils\Main_Window.py", line 352, in loadConfig
+    self.setSource(cfg.search('root', 'input_source', default_value=0))
+  File "F:\yolov5-onnx\utils\Main_Window.py", line 511, in setSource
+    self.displayImg(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+  File "F:\yolov5-onnx\utils\Main_Window.py", line 627, in displayImg
+    self.script_api.img_data = img
+AttributeError: 'MainWindow' object has no attribute 'script_api'
+

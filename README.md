@@ -1,7 +1,7 @@
 # 73-Pattern-recognition-course-design
 2024年华科aia模式识别课程设计-73-真实环境海面目标识别
 相关代码注释
-数据集：
+# 数据集：
 Jianqie.py
 import os
 import cv2
@@ -12,7 +12,7 @@ all_img_num = 5  # 图片名字的位数，例如：五位数 00001.jpg
 videoname = 'target_new.mp4'  # 视频的名字
 capture = cv2.VideoCapture(videoname)
 
-# 检查目录是否存在，不存在则创建
+ #检查目录是否存在，不存在则创建
 if not os.path.exists(path1):
     os.makedirs(path1)
 
@@ -39,46 +39,45 @@ if capture.isOpened():
 else:
     print('视频打开失败！')
 
-# 释放视频捕获对象
+ 释放视频捕获对象
 capture.release()
-# cv2.destroyAllWindows()  # 如果使用了 cv2.imshow() 则需要销毁窗口
-Huafen.py
+ #cv2.destroyAllWindows()  # 如果使用了 cv2.imshow() 则需要销毁窗口
+ # Huafen.py
 import shutil
 import random
 from pathlib import Path
 
-# 输入数据集路径
+ 输入数据集路径
 images_path = Path('./new/images')  # 替换为实际图片文件夹路径
 labels_path = Path('./new/labels')  # 替换为实际标签文件夹路径
 
-# 输出数据集路径
+ 输出数据集路径
 output_path = Path('new_split')
 
-# 创建输出目录结构
+ 创建输出目录结构
 (output_path / 'train' / 'images').mkdir(parents=True, exist_ok=True)
 (output_path / 'train' / 'labels').mkdir(parents=True, exist_ok=True)
 (output_path / 'val' / 'images').mkdir(parents=True, exist_ok=True)
 (output_path / 'val' / 'labels').mkdir(parents=True, exist_ok=True)
-
-# 获取所有图片和标签文件名（假设图片是 .jpg 格式，标签是 .txt 格式）
+ 获取所有图片和标签文件名（假设图片是 .jpg 格式，标签是 .txt 格式）
 images = sorted(images_path.glob('*.jpg'))
 labels = sorted(labels_path.glob('*.txt'))
 
-# 确保图片和标签一一对应
+ 确保图片和标签一一对应
 assert len(images) == len(labels), "图片和标签数量不匹配。"
 for img, lbl in zip(images, labels):
     assert img.stem == lbl.stem, f"图片和标签名称不匹配：{img} 和 {lbl}"
 
-# 打乱顺序
+ 打乱顺序
 data = list(zip(images, labels))
 random.seed(42)  # 设置随机种子以确保可重复性
 random.shuffle(data)  # 打乱数据顺序
 
-# 计算训练集数量
+ 计算训练集数量
 train_ratio = 0.8  # 训练集比例
 train_count = int(len(data) * train_ratio)
 
-# 分别复制到训练集和验证集
+ 分别复制到训练集和验证集
 for i, (img, lbl) in enumerate(data):
     if i < train_count:
         shutil.copy(img, output_path / 'train' / 'images' / img.name)  # 复制图片到训练集
@@ -90,19 +89,19 @@ for i, (img, lbl) in enumerate(data):
 print("数据集拆分完成。")
 
 
-Sea_5s.yaml
+# Sea_5s.yaml
 nc: 3 # 类别数量
 depth_multiple: 0.33 # 模型深度倍数
 width_multiple: 0.50 # 层通道倍数
 
-# 检测头的锚点
+ #检测头的锚点
 anchors:
   - [0.9531, 1.1440, 1.4713, 1.4238, 3.1402, 2.2344] # P3/8
   - [4.8121, 1.9816, 8.3975, 2.8052, 21.8237, 2.2261] # P4/16
   - [18.6426, 1.4270, 19.4326, 2.3723, 18.0818, 4.5073] # P5/32
 
 backbone:
-  # [来源, 数量, 模块, 参数]
+  #[来源, 数量, 模块, 参数]
   [
     [-1, 1, Conv, [64, 6, 2, 2]], # 0-P1/2, 卷积层, 64个卷积核, 核大小6, 步幅2, 填充2
     [-1, 1, Conv, [128, 3, 2]], # 1-P2/4, 卷积层, 128个卷积核, 核大小3, 步幅2
@@ -139,13 +138,13 @@ head: [
   ]
 
 
-Data.yaml
+# Data.yaml
 path: datasets/train # 数据集根目录
 train: images/train # 训练图像（相对于 'path'）
 val: images/val # 验证图像（相对于 'path'）
 test: images/test # 测试图像（可选）
 
-# 类别
+#类别
 names:
   0: this # 类别0
   1: barrier # 类别1
@@ -291,7 +290,7 @@ def kmean_anchors(dataset="./data/coco128.yaml", n=9, img_size=640, thr=4.0, gen
     # fig, ax = plt.subplots(1, 2, figsize=(14, 7),
 
 
-Testanchor.py
+# Testanchor.py
 import numpy as np
 
 from gen_anchors import Model, Dataset, get_yolov5_data
@@ -337,8 +336,8 @@ if __name__ == '__main__':
     test_model(m)  # 运行模型测试
 
 
-YOLO训练和预测
-Train.py
+# YOLO训练和预测
+# Train.py
 
 import argparse
 import pathlib
@@ -401,7 +400,7 @@ def parse_opt(known=False):
     return parser.parse_known_args()[0] if known else parser.parse_args()
 
 
-detect.py
+# detect.py
 import argparse
 import pathlib
 
@@ -450,24 +449,24 @@ def print_args(args):
     print('\n'.join(f'{k}: {v}' for k, v in args.items()))
 
 
-segement.py
+# segement.py
 import torch
-# 使用 torch.hub 从 pytorch/vision 库中加载预训练的 FCN-ResNet50 模型
+#使用 torch.hub 从 pytorch/vision 库中加载预训练的 FCN-ResNet50 模型
 model = torch.hub.load('pytorch/vision:v0.10.0', 'fcn_resnet50', pretrained=True)
-# 或者
-# 使用 torch.hub 从 pytorch/vision 库中加载预训练的 FCN-ResNet101 模型
-# model = torch.hub.load('pytorch/vision:v0.10.0', 'fcn_resnet101', pretrained=True)
+#或者
+#使用 torch.hub 从 pytorch/vision 库中加载预训练的 FCN-ResNet101 模型
+#model = torch.hub.load('pytorch/vision:v0.10.0', 'fcn_resnet101', pretrained=True)
 model.eval()  # 将模型设置为评估模式
 
-# 样本执行（需要 torchvision 库）
+#样本执行（需要 torchvision 库）
 from PIL import Image  # 导入 Pillow 库，用于图像处理
 from torchvision import transforms  # 导入 torchvision 库中的 transforms 模块
 
-# 打开输入图像
+#打开输入图像
 input_image = Image.open('00000.jpg')
 input_image = input_image.convert("RGB")  # 将图像转换为 RGB 模式
 
-# 定义预处理操作：转换为张量并标准化
+#定义预处理操作：转换为张量并标准化
 preprocess = transforms.Compose([
     transforms.ToTensor(),  # 将图像转换为张量
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),  # 标准化
@@ -476,49 +475,49 @@ preprocess = transforms.Compose([
 input_tensor = preprocess(input_image)  # 对图像进行预处理
 input_batch = input_tensor.unsqueeze(0)  # 增加一个维度，创建一个 mini-batch，符合模型的输入要求
 
-# 如果 GPU 可用，则将输入和模型移动到 GPU 上以提高速度
+#如果 GPU 可用，则将输入和模型移动到 GPU 上以提高速度
 if torch.cuda.is_available():
     input_batch = input_batch.to('cuda')
     model.to('cuda')
 
-# 关闭梯度计算，以加快推理速度
+#关闭梯度计算，以加快推理速度
 with torch.no_grad():
     output = model(input_batch)['out'][0]  # 获取模型输出，并取出 batch 的第一个元素
 output_predictions = output.argmax(0)  # 对输出进行 argmax 操作，得到每个像素的类别预测
 
-# 创建一个颜色调色板，为每个类别选择一种颜色
+#创建一个颜色调色板，为每个类别选择一种颜色
 palette = torch.tensor([2 ** 25 - 1, 2 ** 15 - 1, 2 ** 21 - 1])  # 定义颜色调色板
 colors = torch.as_tensor([i for i in range(21)])[:, None] * palette  # 为每个类别生成颜色
 colors = (colors % 255).numpy().astype("uint8")  # 将颜色值限制在 0-255 范围内，并转换为 uint8 类型
 
-# 绘制语义分割预测结果，为每个类别上色
+#绘制语义分割预测结果，为每个类别上色
 r = Image.fromarray(output_predictions.byte().cpu().numpy()).resize(input_image.size)  # 将预测结果转换为图像，并调整大小
 r.putpalette(colors)  # 应用颜色调色板
 
 import matplotlib.pyplot as plt  # 导入 matplotlib 库用于绘图
 plt.imshow(r)  # 显示分割结果图像
-# plt.show()  # 显示图像窗口
+#plt.show()  # 显示图像窗口
 
 
 
-预训练的deeplab模型进行测试代码：
+# 预训练的deeplab模型进行测试代码：
 import torch
-# 使用 torch.hub 从 pytorch/vision 库中加载预训练的 DeepLabV3-ResNet50 模型
+#使用 torch.hub 从 pytorch/vision 库中加载预训练的 DeepLabV3-ResNet50 模型
 model = torch.hub.load('pytorch/vision:v0.10.0', 'deeplabv3_resnet50', pretrained=True)
-# 或者以下任何一个变体
-# model = torch.hub.load('pytorch/vision:v0.10.0', 'deeplabv3_resnet101', pretrained=True)
-# model = torch.hub.load('pytorch/vision:v0.10.0', 'deeplabv3_mobilenet_v3_large', pretrained=True)
+#或者以下任何一个变体
+#model = torch.hub.load('pytorch/vision:v0.10.0', 'deeplabv3_resnet101', pretrained=True)
+#model = torch.hub.load('pytorch/vision:v0.10.0', 'deeplabv3_mobilenet_v3_large', pretrained=True)
 model.eval()  # 将模型设置为评估模式
 
-# 样本执行（需要 torchvision 库）
+#样本执行（需要 torchvision 库）
 from PIL import Image  # 导入 Pillow 库，用于图像处理
 from torchvision import transforms  # 导入 torchvision 库中的 transforms 模块
 
-# 打开输入图像
+#打开输入图像
 input_image = Image.open('00000.jpg')
 input_image = input_image.convert("RGB")  # 将图像转换为 RGB 模式
 
-# 定义预处理操作：转换为张量并标准化
+#定义预处理操作：转换为张量并标准化
 preprocess = transforms.Compose([
     transforms.ToTensor(),  # 将图像转换为张量
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),  # 标准化
@@ -527,31 +526,31 @@ preprocess = transforms.Compose([
 input_tensor = preprocess(input_image)  # 对图像进行预处理
 input_batch = input_tensor.unsqueeze(0)  # 增加一个维度，创建一个 mini-batch，符合模型的输入要求
 
-# 如果 GPU 可用，则将输入和模型移动到 GPU 上以提高速度
+#如果 GPU 可用，则将输入和模型移动到 GPU 上以提高速度
 if torch.cuda.is_available():
     input_batch = input_batch.to('cuda')
     model.to('cuda')
 
-# 关闭梯度计算，以加快推理速度
+#关闭梯度计算，以加快推理速度
 with torch.no_grad():
     output = model(input_batch)['out'][0]  # 获取模型输出，并取出 batch 的第一个元素
 output_predictions = output.argmax(0)  # 对输出进行 argmax 操作，得到每个像素的类别预测
 
-# 创建一个颜色调色板，为每个类别选择一种颜色
+#创建一个颜色调色板，为每个类别选择一种颜色
 palette = torch.tensor([2 ** 25 - 1, 2 ** 15 - 1, 2 ** 21 - 1])  # 定义颜色调色板
 colors = torch.as_tensor([i for i in range(21)])[:, None] * palette  # 为每个类别生成颜色
 colors = (colors % 255).numpy().astype("uint8")  # 将颜色值限制在 0-255 范围内，并转换为 uint8 类型
 
-# 绘制语义分割预测结果，为每个类别上色
+#绘制语义分割预测结果，为每个类别上色
 r = Image.fromarray(output_predictions.byte().cpu().numpy()).resize(input_image.size)  # 将预测结果转换为图像，并调整大小
 r.putpalette(colors)  # 应用颜色调色板
 
 import matplotlib.pyplot as plt  # 导入 matplotlib 库用于绘图
 plt.imshow(r)  # 显示分割结果图像
-# plt.show()  # 显示图像窗口
+#plt.show()  # 显示图像窗口
 
-人机交互
-Build.py
+# 人机交互
+# Build.py
 import os
 import shutil
 
